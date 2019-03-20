@@ -12,63 +12,48 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    //identifiers like txtCount are called member variables
-    //MainActivity is the class and an attribute or 'variable' of that class is TextView, which is a type of View. This particular TextView is named txtCount
-    TextView txtCount;
+    public Button incrementButton;
+    public Button decrementButton;
+    public Button resetButton;
+    public TextView countTextView;
+
+    private View.OnClickListener counterButtonOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            int countValueInteger = Integer.parseInt(countTextView.getText().toString());
+
+            if (v == incrementButton) {
+                countValueInteger++;
+            } else if (v == decrementButton) {
+                countValueInteger--;
+            } else if (v == resetButton) {
+                countValueInteger = 0;
+                Toast.makeText(MainActivity.this, "resetting", Toast.LENGTH_SHORT).show();
+            }
+
+            countTextView.setText(String.valueOf(countValueInteger));
+        }
+    };
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        txtCount= findViewById(R.id.counter_text);
+        countTextView = findViewById(R.id.counter_text);
+        countTextView.setText("0");
 
-        //local variables can only be used within a specific method, unless referenced they cease to be usable after method is complete.
-        Button ResBtn=findViewById(R.id.res_btn);
+        incrementButton = findViewById(R.id.add_btn);
+        decrementButton = findViewById(R.id.sub_btn);
+        resetButton = findViewById(R.id.res_btn);
 
-        ResBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtCount.setText(String.valueOf(0));
-                Toast.makeText(MainActivity.this, "resetting", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        Button SubBtn=findViewById(R.id.sub_btn);
-        SubBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String countValue=txtCount.getText().toString();
-                int intCountValue=Integer.parseInt(countValue);
-                intCountValue--;
-                txtCount.setText(String.valueOf(intCountValue));
-            }
-        });
-
-        Button AddBtn= findViewById(R.id.add_btn);
-        AddBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String countValue =txtCount.getText().toString();
-                int intCountValue =Integer.parseInt(countValue);
-                intCountValue++;
-                txtCount.setText(String.valueOf(intCountValue));
-            }
-        });
-
-    }
-
-    private void onCounterButtonClick(Button countingButton,boolean isIncrement) {
-        String countValue =txtCount.getText().toString();
-        int intCountValue =Integer.parseInt(countValue);
-        if (isIncrement) {
-            intCountValue++;
-        } else {
-            intCountValue--;
-        }
-        txtCount.setText(String.valueOf(intCountValue));
-
+        incrementButton.setOnClickListener(counterButtonOnClickListener);
+        decrementButton.setOnClickListener(counterButtonOnClickListener);
+        resetButton.setOnClickListener(counterButtonOnClickListener);
     }
 
     @Override
